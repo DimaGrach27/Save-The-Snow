@@ -5,21 +5,21 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] GameObject shot;
     [SerializeField] Transform shotPoint;
 
-    RaycastHit hit;
+    private Rigidbody rb;
+
+    private MeshRenderer mesh;
+    [SerializeField] Material criticalBlue;
 
     void Start()
     {
-        //Time.timeScale = 0.1f;
+        rb = GetComponent<Rigidbody>();
+        mesh = GetComponent<MeshRenderer>();
     }
 
 
     void Update()
     {
-        //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        //Physics.Raycast(ray, out hit, 100f);
-
-        //transform.LookAt(new Vector3(hit.point.x, transform.position.y, hit.point.z));
-        if (!GameManager.Win)
+        if (!GameManager.Win && !GameManager.Lose)
         {
             if (Fire.fire && !ShotScripts.isAlive)
                 Shot();
@@ -29,18 +29,30 @@ public class PlayerControl : MonoBehaviour
                 transform.localScale -= Vector3.one * 0.1f * Time.deltaTime;
             }
 
-            if (MoveHeandler.leftRotation != 0)
+            if (MoveHeandler.move)
             {
+                rb.isKinematic = false;
                 transform.position += Vector3.forward * Time.deltaTime;
             }
+            else
+            {
+                rb.velocity = Vector3.zero;
+                rb.isKinematic = true;
+            }
+
             Rotation();
         }
+
+        if (transform.localScale.x < 0.3f)
+            GameManager.Lose = true;
+        if (transform.localScale.x < 0.38f)
+            mesh.material = criticalBlue;
 
     }
 
     void Shot()
     {
-        transform.localScale -= new Vector3(0.03f, 0.03f, 0.03f);
+        transform.localScale -= new Vector3(0.023f, 0.023f, 0.023f);
         Instantiate(shot, shotPoint.position, transform.rotation);
     }
 

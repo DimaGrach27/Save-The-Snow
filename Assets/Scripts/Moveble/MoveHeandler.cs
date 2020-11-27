@@ -3,15 +3,15 @@ using UnityEngine.EventSystems;
 
 public class MoveHeandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    public static float leftRotation;
+    public static bool move;
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        leftRotation = 1f;
+        move = true;
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        leftRotation = 0f;
+        move = false;
     }
 }

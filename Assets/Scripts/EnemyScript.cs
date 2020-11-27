@@ -20,9 +20,7 @@ public class EnemyScript : MonoBehaviour
 
         if(collision.gameObject.tag == "Player")
         {
-            GameManager gameManager = GameManager.GetInstance();
-            gameManager.LoseGame();
-            
+            GameManager.Lose = true;
         }
     }
 

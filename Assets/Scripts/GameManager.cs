@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour
         return _instance;
     }
 
+    [SerializeField] GameObject loseText;
+    public static bool Lose;
 
     [SerializeField] GameObject winText;
     public static bool Win;
@@ -23,13 +25,19 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         Win = false;
+        Lose = false;
+        loseText.SetActive(false);
+        winText.SetActive(false);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void Update()
     {
-        Debug.Log(collision);
+        if (Lose)
+        {
+            Invoke("ReloadScene", 2f);
+            loseText.SetActive(true);
+        }
     }
-
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.tag == "Player")
@@ -38,11 +46,6 @@ public class GameManager : MonoBehaviour
             Invoke("ReloadScene", 3f);
             winText.SetActive(true);
         }
-    }
-
-    public void LoseGame()
-    {
-        ReloadScene();
     }
 
     void ReloadScene() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
